@@ -4,7 +4,11 @@ namespace GutenbergProject.Entities
 {
     public class User
     {
-        public User() { }
+        public User(string userName, string passwordHash) {
+            this.userName = userName;
+            this.passwordHash = passwordHash;
+
+        }
 
         [Key]
         public int id { get; set; }

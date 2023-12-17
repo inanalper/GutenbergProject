@@ -1,0 +1,6 @@
+@GutenbergProject_HostAddress = http://localhost:5048
+
+GET {{GutenbergProject_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

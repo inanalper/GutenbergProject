@@ -7,7 +7,7 @@ namespace GutenbergProject.Entities
         public User() { }
 
         [Key]
-        public int UserId { get; set; }
+        public int id { get; set; }
         public string userName { get; set; }
         public string passwordHash { get; set; }
 

@@ -11,5 +11,10 @@ namespace GutenbergProject.Entities
         public string userName { get; set; }
         public string passwordHash { get; set; }
 
+        public void registerUser()
+        {
+
+        }
+
     }
 }

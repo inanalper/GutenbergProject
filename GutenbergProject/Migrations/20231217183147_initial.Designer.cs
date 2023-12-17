@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GutenbergProject.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20231217172255_initial")]
+    [Migration("20231217183147_initial")]
     partial class initial
     {
         /// <inheritdoc />

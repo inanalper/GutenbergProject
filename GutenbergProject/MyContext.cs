@@ -1,4 +1,5 @@
-﻿using GutenbergProject.Entities;
+﻿
+using GutenbergProject.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GutenbergProject
@@ -14,5 +15,13 @@ namespace GutenbergProject
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.userName)
+                .IsUnique();
+        }
+
     }
 }

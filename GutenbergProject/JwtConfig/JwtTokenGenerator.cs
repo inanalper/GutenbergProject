@@ -22,8 +22,7 @@ namespace GutenbergProject.JwtConfig
             var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name,user.userName),
-                              new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
-
+                            new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
                         };
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWTKey:Secret"]));
            

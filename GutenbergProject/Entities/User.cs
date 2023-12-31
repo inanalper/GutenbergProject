@@ -9,8 +9,6 @@ namespace GutenbergProject.Entities
             this.email = email;
             this.userName = userName;
             this.passwordHash = passwordHash;
-           
-
         }
 
         [Key]
@@ -18,6 +16,7 @@ namespace GutenbergProject.Entities
         public string userName { get; set; }
         public string email { get; set; }
         public string passwordHash { get; set; }
+        public virtual ICollection<UserBook> UserBooks { get; set; }
 
         public void registerUser()
         {

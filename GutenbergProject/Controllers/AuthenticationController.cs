@@ -39,13 +39,12 @@ namespace GutenbergProject.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost("SignIn", Name = "SignIn")]
         public IActionResult SignIn(UserSignInModel model)
         {
             try
             {
-             
+                Console.WriteLine("girdi");
                 var passwordHash = ComputeMD5Hash(model.password);
                 var existingUser = _context.Users.FirstOrDefault(u => u.email == model.email || u.userName == model.userName);
                 if (existingUser == null)
@@ -97,6 +96,7 @@ namespace GutenbergProject.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 return StatusCode(500, "An error occurred.");
             }
         }

@@ -14,7 +14,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie("Cookies", options =>
 {
-    options.Cookie.Name = "Auth";
+    options.Cookie.Name = "Authorization";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 });
 builder.Services.AddHttpClient();

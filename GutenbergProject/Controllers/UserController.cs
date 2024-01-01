@@ -20,7 +20,7 @@ namespace GutenbergProject.Controllers
             _context = context;
         }
 
-        [Authorize]
+   
         [HttpPost("add-books", Name = "Add to Bookshelf")]
         public IActionResult addBook(BookModel book) {
             try
@@ -46,7 +46,7 @@ namespace GutenbergProject.Controllers
 
         }
 
-        [Authorize]
+     
         [HttpDelete("delete-books", Name = "Delete from Bookshelf")]
         public IActionResult addBook(string bookId)
         {
@@ -70,7 +70,7 @@ namespace GutenbergProject.Controllers
 
         }
 
-        [Authorize]
+      
         [HttpGet("get-bookshelf", Name = "Get Bookshelf of a user")]
         public IActionResult addBooks() {
             try

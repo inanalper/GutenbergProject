@@ -1,0 +1,69 @@
+﻿@model BookResultViewModel
+
+@{
+    ViewData["Title"] = "Book Search Result";
+}
+
+<style>
+    .library-button {
+        background-color: orange;
+        font-size: 15px;
+        padding: 3px 10px;
+    }
+
+    .book-card {
+        margin-bottom: 15px;
+    }
+
+        .book-card img {
+            width: 100%;
+            height: auto;
+        }
+</style>
+
+<h2>Book Search Result</h2>
+
+<div class="row">
+    @if (Model != null && Model.Results != null && Model.Results.Any())
+{
+     foreach (var book in Model.Results)
+    {
+    <div class="col-md-3 mb-3">
+        <div class="card book-card">
+            <img src="@book.Formats.FirstOrDefault(f => f.Key == "image/jpeg").Value" class="card-img-top" alt="Cover Image">
+            <div class="card-body">
+                <h5 class="card-title">@book.Title</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Authors:</strong> @string.Join(", ", book.Authors.Select(a => $"{a.Name} (Birth: {a.BirthYear}, Death: {a.DeathYear})"))</li>
+                    <li class="list-group-item">
+                        <strong>Subjects:</strong>
+                        @if (book.Subjects.Count > 1)
+                            {
+                        <span>@string.Join(", ", book.Subjects.Take(1))...</span>
+                            }
+                            else
+                            {
+                        <span>@string.Join(", ", book.Subjects)</span>
+                            }
+                    </li>
+                    <li class="list-group-item"><strong>Languages:</strong> @string.Join(", ", book.Languages)</li>
+                </ul>
+                <button type="button" class="btn library-button" id="addToLibraryButton_@book.Id" onclick="addToLibrary(@book.Id)">Add Library</button>
+            </div>
+        </div>
+    </div>
+    }
+}
+else
+{
+    <p>No books found.</p>
+}
+
+</div>
+
+<script>
+    function addToLibrary(bookId) {
+
+        alert("Kitaplığa eklendi: " + bookId);
+    }
+</script>

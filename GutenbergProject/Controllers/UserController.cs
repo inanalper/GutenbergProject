@@ -88,6 +88,7 @@ namespace GutenbergProject.Controllers
                     bookModel.bookId = book.bookId;
                     bookModel.bookImage = book.bookImage;
                     bookModel.bookName = book.bookName;
+                    bookModel.onPage = book.onPage;
                     bookShelf.Add(bookModel);
                 }
                 return Ok(bookShelf);

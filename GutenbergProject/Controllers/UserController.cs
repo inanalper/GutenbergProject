@@ -22,7 +22,7 @@ namespace GutenbergProject.Controllers
 
         [Authorize]
         [HttpPost("add-books", Name = "Add to Bookshelf")]
-        public IActionResult addBook(BookModel book) {
+        public IActionResult addBook(AddBookModel book) {
             try
             {
                 string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
@@ -48,7 +48,7 @@ namespace GutenbergProject.Controllers
 
         [Authorize]
         [HttpDelete("delete-books", Name = "Delete from Bookshelf")]
-        public IActionResult addBook(string bookId)
+        public IActionResult deleteBook(string bookId)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace GutenbergProject.Controllers
 
         [Authorize]
         [HttpGet("get-bookshelf", Name = "Get Bookshelf of a user")]
-        public IActionResult addBooks() {
+        public IActionResult getBooks() {
             try
             {
                 string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];

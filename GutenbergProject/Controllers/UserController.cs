@@ -74,7 +74,7 @@ namespace GutenbergProject.Controllers
         [HttpGet("get-bookshelf", Name = "Get Bookshelf of a user")]
         public IActionResult getBooks() {
 
-            var tokens = HttpContext.Request.Headers["Authorization"].ToString();
+            string tokens = HttpContext.Request.Headers["Authorization"].ToString();
             Console.WriteLine(tokens);
               string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
 

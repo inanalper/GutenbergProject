@@ -103,7 +103,11 @@ namespace GutenbergPresentation.Controllers
 
         public async Task<IActionResult> ListLibrary()
         {
+            string token = HttpContext.Request.Headers["Authorization"].ToString();
+            // Ensure the HttpClient is properly instantiated, e.g., via dependency injection
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Replace("Bearer ", ""));
             var response = await _httpClient.GetAsync("https://localhost:7219/User/get-bookshelf");
+
 
             if (response.IsSuccessStatusCode)
             {

@@ -1,5 +1,5 @@
-﻿@model List<BookViewModel>
-
+﻿@model List<BookModel>
+@using GutenbergProject.Models
 @{
     ViewData["Title"] = "Library Results";
 }
@@ -13,6 +13,7 @@
 
     .book-card {
         margin-bottom: 15px;
+        cursor: pointer; /* Kartlara tıklanabilir özellik eklemek için cursor'ı değiştir */
     }
 
         .book-card img {
@@ -29,29 +30,20 @@
         foreach (var book in Model)
         {
             <div class="col-md-3 mb-3">
-                <div class="card book-card">
-                    @if (book.Formats != null && book.Formats.ContainsKey("image/jpeg"))
+                <div class="card book-card" onclick="location.href='@Url.Action("ReadBook", "Book", new { id = book.bookId })'">
+                    @if (!string.IsNullOrEmpty(book.bookImage))
                     {
-                        <img src="@book.Formats["image/jpeg"]" class="card-img-top" alt="Cover Image">
+                        <img src="@book.bookImage" class="card-img-top" alt="Book Image">
                     }
                     <div class="card-body">
-                        <h5 class="card-title">@book.Title</h5>
+                        <h5 class="card-title">@book.bookName</h5>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Authors:</strong> @string.Join(", ", book.Authors.Select(a => $"{a.Name} (Birth: {a.BirthYear}, Death: {a.DeathYear})"))</li>
-                            <li class="list-group-item">
-                                <strong>Subjects:</strong>
-                                @if (book.Subjects != null && book.Subjects.Count > 1)
-                                {
-                                    <span>@string.Join(", ", book.Subjects.Take(1))...</span>
-                                }
-                                else
-                                {
-                                    <span>@string.Join(", ", book.Subjects)</span>
-                                }
-                            </li>
-                            <li class="list-group-item"><strong>Languages:</strong> @string.Join(", ", book.Languages)</li>
+                            <!-- Diğer özellikleri ekleyin -->
                         </ul>
-                        <a class="btn library-button" href="@Url.Action("DeleteFromLib", "Book", new { bookId = book.Id })">Sil</a>
+                        <form method="post" asp-controller="Book" asp-action="DeleteFromLib">
+                            <input type="hidden" name="bookId" value="@book.bookId" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -89,7 +89,7 @@ namespace GutenbergPresentation.Controllers
                     });
                   
                     ViewData["Message"] = "Login successful.";
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ListLibrary", "Book");
                 }
                 else
                 {

@@ -28,12 +28,15 @@ namespace GutenbergPresentation.Controllers
         {
             return View();
         }
-
+     
 
         [HttpGet]
         public async Task<BookViewModel> BooksGetById(int bookId)
         {
             var client = _httpClientFactory.CreateClient();
+            string token = HttpContext.Request.Headers["Authorization"].ToString();
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Replace("Bearer ", ""));
             var response = await client.GetAsync($"https://gutendex.com/books/{bookId}");
 
             if (response.IsSuccessStatusCode)
@@ -42,17 +45,18 @@ namespace GutenbergPresentation.Controllers
 
                 var bookResult = JsonConvert.DeserializeObject<BookViewModel>(apiResponse);
 
-             
-                var imageFormats = bookResult.Formats
-                    .Where(kv => kv.Key.StartsWith("image/"))
-                    .ToDictionary(kv => kv.Key, kv => kv.Value);
 
-                var book = new BookViewModel
+                var imageFormats = string.Join(",", bookResult.Formats
+      .Where(kv => kv.Key.StartsWith("image/"))
+      .Select(kv => kv.Value));
+
+                var book = new AddBookModel
                 {
-                    Id = bookId,
-                    Title = bookResult.Title,
-                    Formats = imageFormats,
+                    bookId = bookId.ToString(),
+                    bookName = bookResult.Title,
+                    bookImage = imageFormats
                 };
+
 
                 var addBook = AddBookLib(book);
             }
@@ -62,14 +66,16 @@ namespace GutenbergPresentation.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddBookLib(BookViewModel book)
+        public async Task<IActionResult> AddBookLib(AddBookModel book)
         {
-            var userCredentials = new { Id = book.Id, Title = book.Title ,Formats=book.Formats};
+            var userCredentials = new { bookId = book.bookId, bookName = book.bookName,bookImage=book.bookImage };
             var json = System.Text.Json.JsonSerializer.Serialize(userCredentials);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-           
-            
-                var response = _httpClient.PostAsync("https://localhost:7219/User/add-books", content).Result;
+            string token = HttpContext.Request.Headers["Authorization"].ToString();
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Replace("Bearer ", ""));
+
+            var response = _httpClient.PostAsync("https://localhost:7219/User/add-books", content).Result;
             if (response.IsSuccessStatusCode)
             {
 
@@ -82,29 +88,43 @@ namespace GutenbergPresentation.Controllers
                 return BadRequest(errorMessage);
             }
         }
-
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> DeleteFromLib(int bookId)
         {
-            var response = await _httpClient.DeleteAsync($"https://localhost:7219/User/delete-books?bookId={bookId}");
+            try
+            {
+                string token = HttpContext.Request.Headers["Authorization"].ToString();
 
-            if (response.IsSuccessStatusCode)
-            {
-                return View("Silme işlemi başarılı");
+             
+                string stringBookId = bookId.ToString();
+
+                string apiUrl = $"https://localhost:7219/User/delete-books?bookId={stringBookId}";
+
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Replace("Bearer ", ""));
+
+                var response = await _httpClient.DeleteAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("ListLibrary");
+                }
+                else
+                {
+                    return RedirectToAction("ListLibrary");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return View("Silme işlemi başarısız");
+                Console.WriteLine(ex.Message);
+                throw ex;
             }
         }
-
-
 
 
         public async Task<IActionResult> ListLibrary()
         {
             string token = HttpContext.Request.Headers["Authorization"].ToString();
-            // Ensure the HttpClient is properly instantiated, e.g., via dependency injection
+      
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Replace("Bearer ", ""));
             var response = await _httpClient.GetAsync("https://localhost:7219/User/get-bookshelf");
 
@@ -112,15 +132,18 @@ namespace GutenbergPresentation.Controllers
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                var books = JsonConvert.DeserializeObject<List<BookViewModel>>(apiResponse);
+                var books = JsonConvert.DeserializeObject<List<BookModel>>(apiResponse);
 
                 return View(books);
             }
             else
             {
-                return View(new List<BookViewModel>());
+                return View(new List<BookModel>());
             }
         }
+
+
+
 
     }
 }

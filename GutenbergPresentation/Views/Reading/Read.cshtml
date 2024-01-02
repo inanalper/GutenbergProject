@@ -1,0 +1,35 @@
+﻿@model string[]
+@*
+
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+*@
+@{
+}
+        <div>
+    
+    <span class="ml-auto">
+        <a asp-controller="Reading" asp-action="Exit" asp-route-onPage="@ViewData["onPage"]" asp-route-id="@ViewData["ID"]" class="">Exit</a>
+    </span>
+            <h3>Chunk Content:</h3>
+           
+        
+                @foreach (string row in Model)
+                {
+                <p>@row</p>
+                }
+        
+    <span class="ml-auto">
+        <a asp-controller="Reading" asp-action="Pre" asp-route-onPage="@(Convert.ToInt32(ViewData["onPage"]) - 1)" asp-route-id="@ViewData["ID"]" class="">Previous</a>
+    </span>
+    <span class="ml-auto">
+        <a asp-controller="Reading" asp-action="Next" asp-route-onPage="@(Convert.ToInt32(ViewData["onPage"]) + 1)" asp-route-id="@ViewData["ID"]" asp-route-textChunks="@ViewData["size"]" class="">Next</a>
+    </span>
+        </div>
+    <script>
+        function exit(bookId, onPage) {
+        var exitUrl = '/Exit/Index?bookId=' + bookId + '&onPage=' + onPage;
+        window.location.href = exitUrl;
+        }
+    </script>
+

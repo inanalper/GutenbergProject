@@ -75,6 +75,7 @@ namespace GutenbergPresentation.Controllers
                             List<string[]> textChunks = SplitTextIntoChunks(linkContent, 200);
                             ViewData["onPage"] = onPage;
                             ViewData["ID"] = ID;
+                            ViewData["size"] = textChunks.LongCount();
                             return View("Read", textChunks[onPage]);
                         }
                         else
@@ -133,29 +134,35 @@ namespace GutenbergPresentation.Controllers
         {
             // Your logic here...
 
-            using (HttpClient client = new HttpClient())
-            {
-                // Replace "YourApiEndpoint" with the actual API endpoint URL
-                string apiUrl = "https://localhost:7219/";
+            
+                //// Replace "YourApiEndpoint" with the actual API endpoint URL
+                //string apiUrl = "https://localhost:7219/";
 
-                // Replace "YourPutAction" with the actual PUT action in your API
-                string putAction = "/User/update-reading";
+                //// Replace "YourPutAction" with the actual PUT action in your API
+                //string putAction = "/User/update-reading";
+
+
+                var bookCredentials = new { OnPage = onPage, ID = id };
+                var json = System.Text.Json.JsonSerializer.Serialize(bookCredentials);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = _httpClient.PutAsync("https://localhost:7219/User/update-reading", content).Result;
 
                 // Construct the URL for the PUT request
-                string putUrl = $"{apiUrl}/{putAction}";
+                //string putUrl = $"{apiUrl}/{putAction}";
 
-                // Create an object with the data you want to send in the request body
-                var requestData = new
-                {
-                    onPage = onPage,
-                    id = id
-                };
+                //// Create an object with the data you want to send in the request body
+                //var requestData = new
+                //{
+                //    OnPage = onPage,
+                //    ID = id
+                //};
 
-                // Convert the object to JSON
-                var jsonContent = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+                //// Convert the object to JSON
+                //var jsonContent = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
 
-                // Make the PUT request
-                HttpResponseMessage response = await client.PutAsync(putUrl, jsonContent);
+                //// Make the PUT request
+                //HttpResponseMessage response = await client.PutAsync(putUrl, jsonContent);
 
                 // Check if the request was successful
                 if (response.IsSuccessStatusCode)
@@ -168,7 +175,82 @@ namespace GutenbergPresentation.Controllers
                     // Handle the case where the PUT request was not successful
                     return BadRequest(); // You might want to handle this differently based on your requirements
                 }
-            }
+            
         }
+
+
+        public async Task<IActionResult> Pre(int onPage, int id)
+        {
+            // Your logic here...
+
+            if (onPage < 0)
+            {
+                
+
+
+            }
+
+            else
+            {
+                onPage--;
+            }
+            return RedirectToAction("Read", new { ID = id, OnPage = onPage });
+
+
+            //using (HttpClient client = new HttpClient())
+            //{
+            //    // Replace "YourApiEndpoint" with the actual API endpoint URL
+            //    string apiUrl = "https://localhost:7219/";
+
+            //    // Replace "YourPutAction" with the actual PUT action in your API
+            //    string putAction = "/User/update-reading";
+
+            //    // Construct the URL for the PUT request
+            //    string putUrl = $"{apiUrl}/{putAction}";
+
+            //    // Create an object with the data you want to send in the request body
+            //    var requestData = new
+            //    {
+            //        onPage = onPage,
+            //        id = id
+            //    };
+
+            //    // Convert the object to JSON
+            //    var jsonContent = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+
+            //    // Make the PUT request
+            //    HttpResponseMessage response = await client.PutAsync(putUrl, jsonContent);
+
+            //    // Check if the request was successful
+            //    if (response.IsSuccessStatusCode)
+            //    {
+            //        // Successful PUT request, you can handle the response if needed
+            //        return RedirectToAction("Index", "Home");
+            //    }
+            //    else
+            //    {
+            //        // Handle the case where the PUT request was not successful
+            //        return BadRequest(); // You might want to handle this differently based on your requirements
+            //    }
+            //}
+        }
+
+        public async Task<IActionResult> Next(int onPage, string id, int textChunks)
+        {
+            // Your logic here...
+            
+            if (onPage >= textChunks)
+            {
+                
+
+
+            }
+            else
+            {
+                onPage++;
+            }
+            return RedirectToAction("Read", new { ID = id, OnPage = onPage });
+        }
+
     }
 }

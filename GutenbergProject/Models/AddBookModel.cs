@@ -2,8 +2,7 @@
 
 namespace GutenbergProject.Models
 {
-
-    public class BookModel
+    public class AddBookModel
     {
         [Required]
         public string bookName { get; set; }
@@ -11,7 +10,5 @@ namespace GutenbergProject.Models
         public string bookImage { get; set; }
         [Required]
         public string bookId { get; set; }
-        [Required]
-        public int onPage { get; set; }
     }
 }

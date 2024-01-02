@@ -22,7 +22,7 @@ namespace GutenbergProject.Controllers
 
         [Authorize]
         [HttpPost("add-books", Name = "Add to Bookshelf")]
-        public IActionResult addBook(BookModel book) {
+        public IActionResult addBook(AddBookModel book) {
             try
             {
                 string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
@@ -48,7 +48,7 @@ namespace GutenbergProject.Controllers
 
         [Authorize]
         [HttpDelete("delete-books", Name = "Delete from Bookshelf")]
-        public IActionResult addBook(string bookId)
+        public IActionResult deleteBook(string bookId)
         {
             try
             {
@@ -72,10 +72,12 @@ namespace GutenbergProject.Controllers
 
         [Authorize]
         [HttpGet("get-bookshelf", Name = "Get Bookshelf of a user")]
-        public IActionResult addBooks() {
-            try
-            {
-                string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+        public IActionResult getBooks() {
+
+            string tokens = HttpContext.Request.Headers["Authorization"].ToString();
+            Console.WriteLine(tokens);
+              string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+
                 string userId = JWTDecoder.GetUserIdFromToken(token);
                 User user = _context.Users
                      .Include(u => u.UserBooks)
@@ -88,14 +90,11 @@ namespace GutenbergProject.Controllers
                     bookModel.bookId = book.bookId;
                     bookModel.bookImage = book.bookImage;
                     bookModel.bookName = book.bookName;
+                    bookModel.onPage = book.onPage;
                     bookShelf.Add(bookModel);
                 }
                 return Ok(bookShelf);
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw ex;
-            }
+           
 
         }
 

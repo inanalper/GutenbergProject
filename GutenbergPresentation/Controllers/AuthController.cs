@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using GutenbergProject.Models;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace GutenbergPresentation.Controllers
 {
@@ -64,8 +65,6 @@ namespace GutenbergPresentation.Controllers
             }
         }
 
-
-
         [HttpPost]
         public IActionResult Login(UserLoginModel model)
         {
@@ -81,16 +80,16 @@ namespace GutenbergPresentation.Controllers
                 {
                     var tokenString = response.Content.ReadAsStringAsync().Result;
 
-                    var claims = new List<Claim>();
-                    claims.Add(new Claim(ClaimTypes.Name, model.userName));
-
-                    var identity = new ClaimsIdentity(claims, "custom");
-                    var principal = new ClaimsPrincipal(identity);
-
-                    HttpContext.SignInAsync(principal).Wait();
-
+                    Response.Cookies.Append("Auth", tokenString, new CookieOptions
+                    {
+                        HttpOnly = true, 
+                        Secure = true,  
+                        SameSite = SameSiteMode.None, 
+                        Expires = DateTime.UtcNow.AddMinutes(60) 
+                    });
+                  
                     ViewData["Message"] = "Login successful.";
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ListLibrary", "Book");
                 }
                 else
                 {
@@ -105,6 +104,10 @@ namespace GutenbergPresentation.Controllers
                 return View();
             }
         }
+
+
+
+
 
 
 

@@ -1,0 +1,56 @@
+﻿@model List<BookModel>
+@using GutenbergProject.Models
+@{
+    ViewData["Title"] = "Library Results";
+}
+
+<style>
+    .library-button {
+        background-color: orange;
+        font-size: 15px;
+        padding: 3px 10px;
+    }
+
+    .book-card {
+        margin-bottom: 15px;
+        cursor: pointer; /* Kartlara tıklanabilir özellik eklemek için cursor'ı değiştir */
+    }
+
+        .book-card img {
+            width: 100%;
+            height: auto;
+        }
+</style>
+
+<h2>Library Results</h2>
+
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var book in Model)
+        {
+            <div class="col-md-3 mb-3">
+                <div class="card book-card" onclick="location.href='@Url.Action("ReadBook", "Book", new { id = book.bookId })'">
+                    @if (!string.IsNullOrEmpty(book.bookImage))
+                    {
+                        <img src="@book.bookImage" class="card-img-top" alt="Book Image">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@book.bookName</h5>
+                        <ul class="list-group list-group-flush">
+                            <!-- Diğer özellikleri ekleyin -->
+                        </ul>
+                        <form method="post" asp-controller="Book" asp-action="DeleteFromLib">
+                            <input type="hidden" name="bookId" value="@book.bookId" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No books found.</p>
+    }
+</div>

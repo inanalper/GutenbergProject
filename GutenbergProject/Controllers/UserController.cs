@@ -29,7 +29,18 @@ namespace GutenbergProject.Controllers
             {
                 string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
                 string userId = _jwtDecoder.GetUserIdFromToken(token);
-                User user = _context.Users.Find(Convert.ToInt32(userId));
+                User user = _context.Users
+                     .Include(u => u.UserBooks)
+                     .FirstOrDefault(u => u.id == Convert.ToInt32(userId));
+                ICollection<UserBook> userBooks = user.UserBooks;
+                
+                bool userHasBook = user.UserBooks.Any(ub => ub.bookId == book.bookId);
+
+                if (userHasBook)
+                {
+                    return Conflict("User already has the book");
+                }
+                
                 UserBook userBook = new UserBook();
                 userBook.User = user;
                 userBook.userId = user.id;

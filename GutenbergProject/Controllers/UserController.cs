@@ -14,19 +14,21 @@ namespace GutenbergProject.Controllers
     public class UserController : ControllerBase
     {
         private readonly MyContext _context;
+        private IJWTDecoder _jwtDecoder;
 
-        public UserController(MyContext context)
+        public UserController(MyContext context, IJWTDecoder jwtDecoder)
         {
             _context = context;
+            _jwtDecoder = jwtDecoder;
         }
 
-   
+        [Authorize]
         [HttpPost("add-books", Name = "Add to Bookshelf")]
         public IActionResult addBook(AddBookModel book) {
             try
             {
                 string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-                string userId = JWTDecoder.GetUserIdFromToken(token);
+                string userId = _jwtDecoder.GetUserIdFromToken(token);
                 User user = _context.Users.Find(Convert.ToInt32(userId));
                 UserBook userBook = new UserBook();
                 userBook.User = user;
@@ -46,14 +48,14 @@ namespace GutenbergProject.Controllers
 
         }
 
-     
+        [Authorize]
         [HttpDelete("delete-books", Name = "Delete from Bookshelf")]
         public IActionResult deleteBook(string bookId)
         {
             try
             {
                 string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-                string userId = JWTDecoder.GetUserIdFromToken(token);
+                string userId = _jwtDecoder.GetUserIdFromToken(token);
                 UserBook userBook = _context.UserBooks.FirstOrDefault(book => bookId.Equals(book.bookId) && book.userId == Convert.ToInt32(userId));
                 if (userBook == null)
                 {
@@ -70,7 +72,7 @@ namespace GutenbergProject.Controllers
 
         }
 
-      
+        [Authorize]
         [HttpGet("get-bookshelf", Name = "Get Bookshelf of a user")]
         public IActionResult getBooks() {
 
@@ -78,7 +80,7 @@ namespace GutenbergProject.Controllers
             Console.WriteLine(tokens);
               string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
 
-                string userId = JWTDecoder.GetUserIdFromToken(token);
+                string userId = _jwtDecoder.GetUserIdFromToken(token);
                 User user = _context.Users
                      .Include(u => u.UserBooks)
                      .FirstOrDefault(u => u.id == Convert.ToInt32(userId));
@@ -105,7 +107,7 @@ namespace GutenbergProject.Controllers
             try
             {
                 string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-                string userId = JWTDecoder.GetUserIdFromToken(token);
+                string userId = _jwtDecoder.GetUserIdFromToken(token);
                 UserBook userBook = _context.UserBooks.FirstOrDefault(book => bookId.Equals(book.bookId) && book.userId == Convert.ToInt32(userId));
                 if (userBook == null)
                 {
@@ -130,13 +132,13 @@ namespace GutenbergProject.Controllers
             try
             {
                 string token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
-                string userId = JWTDecoder.GetUserIdFromToken(token);
+                string userId = _jwtDecoder.GetUserIdFromToken(token);
                 UserBook lastReadBook = _context.UserBooks
                                            .Where(ub => ub.userId == Convert.ToInt32(userId))
                                            .OrderByDescending(ub => ub.lastReaded)
                                            .FirstOrDefault();
 
-                if (lastReadBook == null)
+                if (lastReadBook.lastReaded == null)
                 {
                     return NotFound("No books found for this user.");
                 }

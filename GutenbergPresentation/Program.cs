@@ -1,3 +1,4 @@
+using GutenbergPresentation.AuthorizationHandlerMiddleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -12,13 +13,13 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = "oidc";
 })
-.AddCookie("Cookies", options =>
+.AddCookie("Auth", options =>
 {
     options.Cookie.Name = "Auth";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 });
 builder.Services.AddHttpClient();
-
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -37,9 +38,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<BearerTokenMiddleware>();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Reading}/{action=Read}/{id?}");
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
 
 app.Run();

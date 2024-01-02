@@ -19,7 +19,6 @@
                 <p>@row</p>
                 }
         
-        <a href="Read/Page/@ViewBag.onPage+1" class="btn">Next</a>
     <span class="ml-auto">
         <a asp-controller="Reading" asp-action="Pre" asp-route-onPage="@(Convert.ToInt32(ViewData["onPage"]) - 1)" asp-route-id="@ViewData["ID"]" class="">Previous</a>
     </span>

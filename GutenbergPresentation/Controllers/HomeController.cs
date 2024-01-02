@@ -29,9 +29,10 @@ namespace GutenbergPresentation.Controllers
 
 
         }
-        [Authorize]
+      
         public IActionResult Privacy()
         {
+           
             return View();
         }
 

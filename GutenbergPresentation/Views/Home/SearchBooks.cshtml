@@ -48,7 +48,10 @@
                     </li>
                     <li class="list-group-item"><strong>Languages:</strong> @string.Join(", ", book.Languages)</li>
                 </ul>
-                <button type="button" class="btn library-button" id="addToLibraryButton_@book.Id" onclick="addToLibrary(@book.Id)">Add Library</button>
+
+
+                        <a class="btn library-button" href="@Url.Action("BooksGetById", "Book", new { bookId = @book.Id })">Add Library</a>
+
             </div>
         </div>
     </div>
@@ -61,9 +64,3 @@ else
 
 </div>
 
-<script>
-    function addToLibrary(bookId) {
-
-        alert("Kitaplığa eklendi: " + bookId);
-    }
-</script>

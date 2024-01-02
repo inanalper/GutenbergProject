@@ -16,6 +16,8 @@ builder.Services.AddDbContext<GutenbergProject.MyContext>(opt => opt.UseSqlServe
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+
 builder.Services.AddSwaggerGen(setup =>
 {
     var jwtSecurityScheme = new OpenApiSecurityScheme
@@ -40,6 +42,7 @@ builder.Services.AddSwaggerGen(setup =>
     });
 
 });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

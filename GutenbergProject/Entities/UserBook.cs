@@ -18,7 +18,6 @@ namespace GutenbergProject.Entities
         [Key]
         public int Id { get; set; }
 
-        // Foreign key for User
         [ForeignKey("User")]
         public int userId { get; set; }
 
@@ -26,7 +25,7 @@ namespace GutenbergProject.Entities
         public string bookImage { get; set; }
         public string bookId { get; set; }
         public int onPage { get; set; }
-        public DateTime lastReaded { get; set; }
+        public DateTime? lastReaded { get; set; }
 
         // Navigation property for User
         public virtual User User { get; set; }

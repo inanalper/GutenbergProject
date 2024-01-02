@@ -2,9 +2,14 @@
 
 namespace GutenbergProject.Service
 {
-    public static class JWTDecoder
+    public interface IJWTDecoder
     {
-        public static string GetUserIdFromToken(string token)
+        string GetUserIdFromToken(string token);
+    }
+
+    public class JWTDecoder : IJWTDecoder
+    {
+        public string GetUserIdFromToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
 

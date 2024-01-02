@@ -1,4 +1,5 @@
 using GutenbergProject.JwtConfig;
+using GutenbergProject.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -70,7 +71,7 @@ builder.Services.AddAuthentication(options =>
 
 
 
-
+builder.Services.AddScoped<IJWTDecoder, JWTDecoder>();
 builder.Services.AddScoped<JwtTokenGenerator>();
 var app = builder.Build();
 

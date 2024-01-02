@@ -13,7 +13,7 @@
 
     .book-card {
         margin-bottom: 15px;
-        cursor: pointer; /* Kartlara tıklanabilir özellik eklemek için cursor'ı değiştir */
+        cursor: pointer;
     }
 
         .book-card img {
@@ -30,7 +30,10 @@
         foreach (var book in Model)
         {
             <div class="col-md-3 mb-3">
-                <div class="card book-card" onclick="location.href='@Url.Action("ReadBook", "Book", new { id = book.bookId })'">
+                <div class="card book-card" onclick="location.href='@Url.Action("Read", "Reading", new { id = book.bookId, onPage = book.onPage })'">
+               
+
+
                     @if (!string.IsNullOrEmpty(book.bookImage))
                     {
                         <img src="@book.bookImage" class="card-img-top" alt="Book Image">
@@ -38,7 +41,6 @@
                     <div class="card-body">
                         <h5 class="card-title">@book.bookName</h5>
                         <ul class="list-group list-group-flush">
-                            <!-- Diğer özellikleri ekleyin -->
                         </ul>
                         <form method="post" asp-controller="Book" asp-action="DeleteFromLib">
                             <input type="hidden" name="bookId" value="@book.bookId" />

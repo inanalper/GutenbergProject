@@ -45,6 +45,7 @@ namespace GutenbergPresentation.Controllers
 
         public async Task<IActionResult> SearchBooks(string search)
         {
+            
             string encodedSearch = Uri.EscapeDataString(search);
             string endpoint = $"/books?search={encodedSearch}";
 
@@ -63,12 +64,6 @@ namespace GutenbergPresentation.Controllers
                 return View("Error");
             }
         }
-
-
-
-
-
-
 
     }
 

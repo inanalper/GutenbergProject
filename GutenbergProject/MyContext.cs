@@ -28,10 +28,6 @@ namespace GutenbergProject
                 .WithMany(u => u.UserBooks)
                 .HasForeignKey(ub => ub.userId);
 
-            modelBuilder.Entity<UserBook>()
-                .HasIndex(ub => ub.bookId)
-                .IsUnique();
-
         }
     }
 }

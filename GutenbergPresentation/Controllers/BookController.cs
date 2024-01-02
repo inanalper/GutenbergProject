@@ -47,8 +47,8 @@ namespace GutenbergPresentation.Controllers
 
 
                 var imageFormats = string.Join(",", bookResult.Formats
-      .Where(kv => kv.Key.StartsWith("image/"))
-      .Select(kv => kv.Value));
+                    .Where(kv => kv.Key.StartsWith("image/"))
+                    .Select(kv => kv.Value));
 
                 var book = new AddBookModel
                 {

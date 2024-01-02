@@ -18,7 +18,6 @@ namespace GutenbergProject.Entities
         [Key]
         public int Id { get; set; }
 
-        // Foreign key for User
         [ForeignKey("User")]
         public int userId { get; set; }
 

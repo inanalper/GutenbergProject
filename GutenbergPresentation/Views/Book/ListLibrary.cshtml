@@ -13,7 +13,7 @@
 
     .book-card {
         margin-bottom: 15px;
-        cursor: pointer; /* Kartlara tıklanabilir özellik eklemek için cursor'ı değiştir */
+        cursor: pointer;
     }
 
         .book-card img {
@@ -41,7 +41,6 @@
                     <div class="card-body">
                         <h5 class="card-title">@book.bookName</h5>
                         <ul class="list-group list-group-flush">
-                            <!-- Diğer özellikleri ekleyin -->
                         </ul>
                         <form method="post" asp-controller="Book" asp-action="DeleteFromLib">
                             <input type="hidden" name="bookId" value="@book.bookId" />

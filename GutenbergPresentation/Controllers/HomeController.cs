@@ -65,12 +65,6 @@ namespace GutenbergPresentation.Controllers
             }
         }
 
-
-
-
-
-
-
     }
 
 }

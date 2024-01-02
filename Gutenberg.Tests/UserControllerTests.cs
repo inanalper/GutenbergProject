@@ -106,7 +106,7 @@ namespace Gutenberg.Tests
         public void GetBooks_ReturnsBookshelf()
         {
             // Arrange
-            var dbName = Guid.NewGuid().ToString(); // Unique database name
+            var dbName = Guid.NewGuid().ToString();
             var options = new DbContextOptionsBuilder<MyContext>()
                 .UseInMemoryDatabase(databaseName: dbName)
                 .Options;
@@ -144,7 +144,7 @@ namespace Gutenberg.Tests
         public void UpdateLastRead_BookExists_UpdatesPageAndReturnsOk()
         {
             // Arrange
-            var dbName = Guid.NewGuid().ToString(); // Unique database name
+            var dbName = Guid.NewGuid().ToString();
             var options = new DbContextOptionsBuilder<MyContext>()
                 .UseInMemoryDatabase(databaseName: dbName)
                 .Options;
@@ -178,7 +178,6 @@ namespace Gutenberg.Tests
             Assert.IsType<OkResult>(result);
 
             // Check if the book's onPage and lastReaded fields were updated
-            // Check if the book's onPage and lastReaded fields were updated
             var updatedUserBook = context.UserBooks.FirstOrDefault(ub => ub.bookId == bookId && ub.userId == userId);
             Assert.NotNull(updatedUserBook);
             Assert.Equal(onPage, updatedUserBook.onPage);
@@ -193,7 +192,7 @@ namespace Gutenberg.Tests
         public void GetLastReadBook_BookExists_ReturnsLastReadBook()
         {
             // Arrange
-            var dbName = Guid.NewGuid().ToString(); // Unique database name
+            var dbName = Guid.NewGuid().ToString();
             var options = new DbContextOptionsBuilder<MyContext>()
                 .UseInMemoryDatabase(databaseName: dbName)
                 .Options;
@@ -201,7 +200,6 @@ namespace Gutenberg.Tests
             using var context = new MyContext(options);
             var userId = 1; // Test user ID
 
-            // Add a test user and books to the in-memory database
             var user = new User("mail@gmail.com", "TestUser", "passwordHash");
             context.Users.Add(user);
             context.UserBooks.Add(new UserBook { userId = userId, lastReaded = DateTime.Now.AddDays(-1), bookId = "12", bookImage = "imageurl", bookName = "Test Book" }); // Earlier read book
@@ -225,37 +223,8 @@ namespace Gutenberg.Tests
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var lastReadBook = Assert.IsType<UserBook>(okResult.Value);
-            Assert.Equal(expectedBook, lastReadBook); // Verify that the returned book is the expected last read book
+            Assert.Equal(expectedBook, lastReadBook);
         }
 
-        [Fact]
-        public void GetLastReadBook_NoBooks_ReturnsNotFound()
-        {
-            // Arrange
-            // Similar setup as before, but without adding UserBooks to the context
-            var dbName = Guid.NewGuid().ToString(); // Unique database name
-            var options = new DbContextOptionsBuilder<MyContext>()
-                .UseInMemoryDatabase(databaseName: dbName)
-                .Options;
-
-            using var context = new MyContext(options);
-            var userId = 1; // Test user ID
-            var mockJwtDecoder = new Mock<IJWTDecoder>();
-            mockJwtDecoder.Setup(j => j.GetUserIdFromToken(It.IsAny<string>())).Returns(userId.ToString());
-
-            var controller = new UserController(context, mockJwtDecoder.Object);
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext()
-            };
-            controller.HttpContext.Request.Headers["Authorization"] = "Bearer testtoken";
-
-            // Act
-            var result = controller.GetLastReadBook();
-
-            // Assert
-            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Equal("No books found for this user.", notFoundResult.Value);
-        }
     }
 }

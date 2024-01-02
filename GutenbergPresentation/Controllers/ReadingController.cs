@@ -129,7 +129,7 @@ namespace GutenbergPresentation.Controllers
             
             if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ListLibrary", "Book");
                 }
                 else
                 {
@@ -146,14 +146,7 @@ namespace GutenbergPresentation.Controllers
 
             if (onPage < 0)
             {
-
                 onPage++;
-
-            }
-
-            else
-            {
-                
             }
             return RedirectToAction("Read", new { ID = id, OnPage = onPage });
 
@@ -166,13 +159,8 @@ namespace GutenbergPresentation.Controllers
             if (onPage >= textChunks)
             {
                 onPage--;
+            }
 
-                
-            }
-            else
-            {
-                
-            }
             return RedirectToAction("Read", new { ID = id, OnPage = onPage });
         }
 

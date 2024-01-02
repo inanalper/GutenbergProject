@@ -30,7 +30,10 @@
         foreach (var book in Model)
         {
             <div class="col-md-3 mb-3">
-                <div class="card book-card" onclick="location.href='@Url.Action("ReadBook", "Book", new { id = book.bookId })'">
+                <div class="card book-card" onclick="location.href='@Url.Action("Read", "Reading", new { id = book.bookId, onPage = book.onPage })'">
+               
+
+
                     @if (!string.IsNullOrEmpty(book.bookImage))
                     {
                         <img src="@book.bookImage" class="card-img-top" alt="Book Image">

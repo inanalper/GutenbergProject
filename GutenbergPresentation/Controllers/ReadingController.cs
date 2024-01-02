@@ -30,10 +30,9 @@ namespace GutenbergPresentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Read()
+        public async Task<IActionResult> Read(string ID, int onPage)
         {
-            string ID = "5833";
-            int onPage = 0;
+            
             string encodedSearch = Uri.EscapeDataString(ID);
             string endpoint = $"/books?ids={encodedSearch}";
 
@@ -185,14 +184,14 @@ namespace GutenbergPresentation.Controllers
 
             if (onPage < 0)
             {
-                
 
+                onPage++;
 
             }
 
             else
             {
-                onPage--;
+                
             }
             return RedirectToAction("Read", new { ID = id, OnPage = onPage });
 
@@ -241,13 +240,13 @@ namespace GutenbergPresentation.Controllers
             
             if (onPage >= textChunks)
             {
-                
+                onPage--;
 
 
             }
             else
             {
-                onPage++;
+                
             }
             return RedirectToAction("Read", new { ID = id, OnPage = onPage });
         }

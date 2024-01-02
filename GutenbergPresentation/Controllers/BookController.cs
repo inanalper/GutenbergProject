@@ -67,8 +67,9 @@ namespace GutenbergPresentation.Controllers
             var userCredentials = new { Id = book.Id, Title = book.Title ,Formats=book.Formats};
             var json = System.Text.Json.JsonSerializer.Serialize(userCredentials);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = _httpClient.PostAsync("https://localhost:7219/User/add-books", content).Result;
+           
+            
+                var response = _httpClient.PostAsync("https://localhost:7219/User/add-books", content).Result;
             if (response.IsSuccessStatusCode)
             {
 

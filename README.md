@@ -6,7 +6,7 @@ Since it was completed only to meet the requirements of the assignment and in a 
 
 The project's other contributors are:
 
-Yeşim Gürbüzer
-Gizem İpek
-Mert Boyaoğlu
-Eren Ersoyluoğlu
+Yeşim Gürbüzer,
+Gizem İpek,
+Mert Boyaoğlu,
+Eren Ersoyluoğlu.
